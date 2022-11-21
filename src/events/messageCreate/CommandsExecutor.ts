@@ -28,11 +28,10 @@ export default class CommandsExecutor extends Event {
         .setDescription(`You cannot execute this command: **${missingPerms.reason}**`)
         .setColor(Colors.RED);
       if (missingPerms.missingPerms?.length) {
-        errorResponse.addField('Missing permissions', `
-\`\`\`
-${missingPerms.missingPerms}
-\`\`\`
-`);
+        errorResponse.addFields({
+          name: 'Missing permissions',
+          value: `\`\`\`${missingPerms.missingPerms}\`\`\``,
+        });
       }
       await sendTemporal(source, { content: `<@${message.author.id}>`, embeds: [errorResponse] });
       return;

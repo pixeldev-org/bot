@@ -60,10 +60,14 @@ export default abstract class AbstractCommand {
   }
 
   /** Get the usage of this command */
-  public static getUsage(_: string): MessageEmbed { return new MessageEmbed(); }
+  public static getUsage(_: string): MessageEmbed {
+    return new MessageEmbed();
+  }
 
   /** Return the autocompletable options associated with this option */
-  public static getAutocomplete(_option: string, _interaction: AutocompleteInteraction, _bot: Bot): string[] { return []; }
+  public static getAutocomplete(_option: string, _interaction: AutocompleteInteraction, _bot: Bot): string[] {
+    return [];
+  }
 
   /** Execute this command */
   public abstract execute(): Promise<unknown>;
@@ -105,7 +109,12 @@ export default abstract class AbstractCommand {
       .setTitle(`${Symbols.ERROR} Error`)
       .setColor(Colors.RED)
       .setDescription('An internal error happened while executing that command.');
-    if (message) errorEmbed.addField('Message', `\`\`\`${message}\`\`\``);
+    if (message) {
+      errorEmbed.addFields({
+        name: 'Message',
+        value: `\`\`\`${message}\`\`\``,
+      });
+    }
 
     if (this.response || (this.source.isInteraction && (this.source.getRaw() as CommandInteraction).deferred)) return this.edit(errorEmbed);
 
@@ -114,7 +123,8 @@ export default abstract class AbstractCommand {
 
   /** Send an embed about this command's usage */
   protected async sendUsage(): Promise<void> {
-    await this.reply(this.getConstructor().getUsage(this.prefix));
+    await this.reply(this.getConstructor()
+      .getUsage(this.prefix));
   }
 
   /** Utility to get the MessageOptions from the message and additions specified */

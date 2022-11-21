@@ -53,7 +53,10 @@ export default abstract class Command extends AbstractCommand {
       });
     }
     if (this.data.names.length > 1) {
-      embed.addField('Aliases', this.data.names.slice(1).map((alias) => `\`${alias}\``).join(', '));
+      embed.addFields({
+        name: 'Aliases',
+        value: this.data.names.slice(1).map((alias) => `\`${alias}\``).join(', '),
+      });
     }
     return embed;
   }

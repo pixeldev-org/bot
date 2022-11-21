@@ -39,16 +39,23 @@ export default abstract class ParentCommand extends Command {
       .setDescription(this.data.description)
       .setColor(this.data.defaultColor)
       .setAuthor({ name: `❔ Showing usage of ${prefix}${name}` })
-      .addField('Subcommands', `${this.getSubCommands().map((sc) => `\`${sc.data.names}\``).join(', ')}`, true);
+      .addFields({
+        name: 'Subcommands',
+        value: `${this.getSubCommands().map((sc) => `\`${sc.data.names}\``).join(', ')}`,
+        inline: true,
+      });
     if (this.data.userPerms) {
-      embed.addField(
-        'Required Permissions',
-        `\`${this.data.userPerms.join('`, `')}\``,
-        true,
-      );
+      embed.addFields({
+        name: 'Required Permissions',
+        value: `\`${this.data.userPerms.join('`, `')}\``,
+        inline: true,
+      });
     }
     if (this.data.names.length > 1) {
-      embed.addField('Aliases', this.data.names.slice(1).map((alias) => `\`${alias}\``).join(', '));
+      embed.addFields({
+        name: 'Aliases',
+        value: this.data.names.slice(1).map((alias) => `\`${alias}\``).join(', '),
+      });
     }
     return embed;
   }
