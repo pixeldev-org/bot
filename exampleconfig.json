@@ -1,4 +1,5 @@
 {
+    "GUILD_ID": "YOUR_GUILD_ID",
     "DISCORD_TOKEN": "TOKEN",
     "COMMAND_PREFIXES": [
         "!",
