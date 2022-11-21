@@ -8,7 +8,9 @@ import {
   white,
 } from 'colors';
 
-import { DISCORD_TOKEN, COMMAND_PREFIXES, DATABASE } from './config.json';
+import {
+  GUILD_ID, DISCORD_TOKEN, COMMAND_PREFIXES, DATABASE,
+} from './config.json';
 
 import Bot from './src/Bot';
 
@@ -39,8 +41,9 @@ new Bot({
   },
 }, {
   token: DISCORD_TOKEN,
+  guildId: GUILD_ID,
   prefixes: COMMAND_PREFIXES,
-  loadApplication: false,
+  loadApplication: true,
   database: DATABASE,
   commandsPath: `${__dirname}/src/commands`,
   eventsPath: `${__dirname}/src/events`,

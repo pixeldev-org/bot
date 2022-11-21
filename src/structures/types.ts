@@ -6,13 +6,15 @@ import {
   MessageEmbed,
   MessageOptions,
   PermissionResolvable,
-  ReplyMessageOptions,
+  ReplyMessageOptions, Snowflake,
 } from 'discord.js';
 
 /** Options for creating a bot */
 export interface BotOptions {
   /** Spooky */
   token: string,
+  /** The guild where the bot is running */
+  guildId: Snowflake,
   /** The prefixes for this bot's message commands */
   prefixes: string[],
   /** Whether to force load the application commands to Discord */
