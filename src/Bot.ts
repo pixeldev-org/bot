@@ -4,6 +4,12 @@ import {
 } from 'discord.js';
 import { Tracer, colorConsole } from 'tracer';
 import { PrismaClient } from '@prisma/client';
+import {
+  createClient, RedisClientOptions,
+  RedisClientType, RedisDefaultModules,
+  RedisFunctions, RedisModules,
+  RedisScripts,
+} from 'redis';
 import LoggerConfig = Tracer.LoggerConfig;
 
 import CommandManager from './CommandManager';
@@ -34,7 +40,10 @@ export default class Bot {
   /** The Prisma client for this bot */
   readonly prisma: PrismaClient;
 
-  constructor(clientOptions: ClientOptions, loggerConfig: LoggerConfig, botOptions: BotOptions) {
+  /** The redis client for this bot  */
+  readonly redis: RedisClientType<RedisDefaultModules & RedisModules, RedisFunctions, RedisScripts>;
+
+  constructor(clientOptions: ClientOptions, loggerConfig: LoggerConfig, botOptions: BotOptions, redisClientOptions: RedisClientOptions) {
     this.options = botOptions;
     this.client = new Client(clientOptions);
     this.commands = new CommandManager(this);
@@ -42,6 +51,7 @@ export default class Bot {
     this.schedules = new ScheduleManager(this);
     this.logger = colorConsole(loggerConfig);
     this.prisma = new PrismaClient({ datasources: { db: { url: botOptions.database } } });
+    this.redis = createClient(redisClientOptions);
   }
 
   public async start(): Promise<Bot> {
@@ -52,6 +62,11 @@ export default class Bot {
     await this.schedules.init();
     await this.events.init();
     await this.commands.init();
+
+    await this.redis.connect();
+    this.logger.log(`Connected to redis at ${this.redis.options?.url}`);
+
+    await this.redis.set('test', 'test');
 
     this.logger.log(`The bot has started! Prefixes: '${this.options.prefixes}'`);
 

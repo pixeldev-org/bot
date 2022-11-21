@@ -9,7 +9,7 @@ import {
 } from 'colors';
 
 import {
-  GUILD_ID, DISCORD_TOKEN, COMMAND_PREFIXES, DATABASE,
+  GUILD_ID, DISCORD_TOKEN, COMMAND_PREFIXES, REDIS, DATABASE,
 } from './config.json';
 
 import Bot from './src/Bot';
@@ -48,7 +48,7 @@ new Bot({
   commandsPath: `${__dirname}/src/commands`,
   eventsPath: `${__dirname}/src/events`,
   schedulesPath: `${__dirname}/src/schedules`,
-})
+}, REDIS)
   .start()
   .catch(async (err) => {
     // ? console is used to log the error
