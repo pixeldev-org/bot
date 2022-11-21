@@ -73,11 +73,10 @@ export default class CommandManager {
   private async loadApplicationCommands(): Promise<void> {
     const commands: Collection<string, ApplicationCommand> = getApplicationCommands(this.getCommandClasses() as unknown as CommandSubclass[]);
 
-    const commandManager = this.bot.client.application?.commands;
-    if (!commandManager) return;
-    await commandManager.set(Array.from(commands.values()) as ApplicationCommandDataResolvable[]);
-
-    this.bot.logger.info('Application Commands loaded to Discord!');
+    this.bot.client.guilds.fetch(this.bot.options.guildId).then((guild) => {
+      guild.commands.set(Array.from(commands.values()) as ApplicationCommandDataResolvable[]);
+      this.bot.logger.info('Application Commands loaded to Discord!');
+    });
   }
 
   /** Get the array of all the available command classes */
